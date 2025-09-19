@@ -1,0 +1,117 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  }
+  
+  body { 
+    font-family: 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: linear-gradient(135deg, #020617 0%, #0f172a 50%, #1e293b 100%);
+    min-height: 100vh;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-md border border-white/10 rounded-xl;
+  }
+  
+  .glass-button {
+    @apply bg-white/10 hover:bg-white/20 backdrop-blur-sm border border-white/20 rounded-lg transition-all duration-200;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-400 to-secondary-400 bg-clip-text text-transparent;
+  }
+  
+  .shadow-glow {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.2), 0 0 40px rgba(16, 185, 129, 0.1);
+  }
+  
+  .input-modern {
+    @apply bg-dark-800/50 backdrop-blur-sm border border-dark-600 rounded-lg px-4 py-3 
+           focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 
+           transition-all duration-200 placeholder-dark-400;
+  }
+  
+  .btn-primary {
+    @apply bg-gradient-to-r from-primary-600 to-primary-500 hover:from-primary-700 hover:to-primary-600 
+           text-white font-medium px-6 py-3 rounded-lg shadow-lg hover:shadow-xl 
+           transform hover:scale-105 transition-all duration-200 disabled:opacity-50 
+           disabled:hover:scale-100 disabled:cursor-not-allowed;
+  }
+  
+  .btn-secondary {
+    @apply bg-gradient-to-r from-secondary-600 to-secondary-500 hover:from-secondary-700 hover:to-secondary-600 
+           text-white font-medium px-6 py-3 rounded-lg shadow-lg hover:shadow-xl 
+           transform hover:scale-105 transition-all duration-200;
+  }
+  
+  .card-modern {
+    @apply glass-panel p-6 shadow-xl hover:shadow-2xl transition-all duration-300 
+           hover:bg-white/10 border-l-4 border-l-primary-500;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { 
+  width: 8px; 
+  height: 8px;
+}
+
+::-webkit-scrollbar-track { 
+  background: rgba(15, 23, 42, 0.1); 
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb { 
+  background: linear-gradient(135deg, #334155, #475569); 
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover { 
+  background: linear-gradient(135deg, #475569, #64748b); 
+}
+
+/* Selection styling */
+::selection {
+  background: rgba(16, 185, 129, 0.3);
+  color: white;
+}
+
+/* Loading animations */
+@keyframes shimmer {
+  0% { background-position: -468px 0; }
+  100% { background-position: 468px 0; }
+}
+
+.loading-shimmer {
+  animation: shimmer 1.2s ease-in-out infinite;
+  background: linear-gradient(90deg, #1e293b 0px, #334155 40px, #1e293b 80px);
+  background-size: 468px 104px;
+}
+
+/* Toast customization */
+.Toastify__toast-theme--dark {
+  background: rgba(30, 41, 59, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+}
+
+.Toastify__progress-bar--success {
+  background: linear-gradient(90deg, #10b981, #059669) !important;
+}
+
+.Toastify__progress-bar--error {
+  background: linear-gradient(90deg, #ef4444, #dc2626) !important;
+}
