@@ -7,7 +7,7 @@ const LOCAL_KEY = 'expense_auth';
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // Force loading to false for demo
 
   useEffect(() => {
     const data = localStorage.getItem(LOCAL_KEY);
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
         setToken(parsed.token);
       } catch {}
     }
-    setLoading(false);
+    // setLoading(false); // Already set to false above
   }, []);
 
   const login = (user, token) => {

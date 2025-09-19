@@ -1,17 +1,20 @@
 import { useState } from 'react';
-import { FiMessageCircle, FiX, FiSend, FiBot, FiUser } from 'react-icons/fi';
+import { FiMessageCircle, FiX, FiSend, FiUser } from 'react-icons/fi';
 
 const rules = [
   { key: /food|restaurant|grocer|eat|meal/i, reply: '🍽️ Smart Food Tip: Plan your meals weekly and batch cook to reduce food costs by up to 40%!' },
   { key: /shopping|buy|purchase|store/i, reply: '🛍️ Shopping Wisdom: Wait 24 hours before non-essential purchases. You\'ll be surprised how often you forget about them!' },
   { key: /transport|bus|fuel|gas|car|travel/i, reply: '🚗 Transport Hack: Combine errands into one trip and consider carpooling or public transport to cut costs significantly.' },
+  { key: /train|rail|ticket/i, reply: '🚆 Train Travel: Book tickets in advance, use rail passes, and travel during off-peak hours for discounts.' },
+  { key: /hotel|stay|accommodation|room/i, reply: '🏨 Hotel Savings: Compare prices online, use loyalty programs, and consider alternative accommodations like hostels or rentals.' },
+  { key: /stationary|pen|notebook|paper|office/i, reply: '✏️ Stationary Tips: Buy in bulk, look for sales, and avoid branded items for everyday use.' },
   { key: /bills|utilities|electric|water|phone/i, reply: '📄 Bills Management: Review and cancel unused subscriptions monthly. Set up autopay to avoid late fees!' },
   { key: /entertainment|movie|games|fun|leisure/i, reply: '🎬 Entertainment Budget: Set a monthly fun budget and look for free local events. Your wallet will thank you!' },
-  { key: /save|saving|tip|money|budget/i, reply: '💰 Golden Rule: Pay yourself first! Automate transfers to savings before you spend. Even $25/week adds up!' },
-  { key: /help|hello|hi|start/i, reply: '👋 Hey there! I\'m your financial assistant. Ask me about saving tips for food, transport, shopping, bills, or entertainment!' }
+  { key: /save|saving|tip|money|budget/i, reply: '💰 Golden Rule: Pay yourself first! Automate transfers to savings before you spend. Even ₹25/week adds up!' },
+  { key: /help|hello|hi|start/i, reply: '👋 Hey there! I\'m your financial assistant. Ask me about saving tips for food, transport, shopping, bills, entertainment, train, hotel, or stationary!' }
 ];
 
-export default function Chatbot() {
+export default function Chatbot({ expenses = [] }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState([
     { from: 'bot', text: '👋 Hey! I\'m your smart financial assistant. Ask me for personalized saving tips!' }
@@ -19,9 +22,48 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
 
+  // Analyze expenses by category
+  const categoryTotals = expenses.reduce((acc, exp) => {
+    const cat = exp.category || 'Other';
+    acc[cat] = (acc[cat] || 0) + exp.amount;
+    return acc;
+  }, {});
+
+  // Find top spending category
+  const topCategory = Object.entries(categoryTotals).sort((a, b) => b[1] - a[1])[0]?.[0];
+
+  const categoryTips = {
+    Food: '🍽️ You spend most on Food. Try meal prepping, buying in bulk, and reducing takeout to save more!',
+    Transport: '🚗 Transport is your biggest expense. Consider carpooling, using public transport, or planning routes to save fuel.',
+    Shopping: '🛍️ Shopping is high. Wait 24 hours before non-essential purchases and look for discounts.',
+    Bills: '📄 Bills are a major expense. Review subscriptions and utilities for possible savings.',
+    Entertainment: '🎬 Entertainment is costing you. Set a monthly fun budget and explore free local events.',
+    Other: '💡 Review your miscellaneous expenses for hidden savings opportunities.'
+  };
+
   const respond = (text) => {
+    // Total expense
+    if (/total/i.test(text)) {
+      const total = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+  return `💰 Your total expense is ₹${total.toFixed(2)}.`;
+    }
+    // Highest expense
+    if (/highest|max|biggest/i.test(text)) {
+      if (expenses.length === 0) return '🔍 No expenses found.';
+      const highest = expenses.reduce((max, exp) => exp.amount > max.amount ? exp : max, expenses[0]);
+  return `🔝 Your highest expense is ₹${highest.amount.toFixed(2)} for '${highest.category || 'Other'}' on ${highest.date ? new Date(highest.date).toLocaleDateString() : 'N/A'}.`;
+    }
+    // Personalized tip
+    if (/my|personal|analyze|custom|based/i.test(text)) {
+      if (topCategory) {
+        return categoryTips[topCategory] + ` (Your top category: ${topCategory})`;
+      } else {
+        return '🔍 Add some expenses first so I can analyze and give you personalized tips!';
+      }
+    }
+    // Otherwise, use rules
     const rule = rules.find(r => r.key.test(text));
-    return rule ? rule.reply : '🤔 I can help you save money! Try asking about food, transport, shopping, bills, entertainment, or general saving tips. What would you like to know?';
+    return rule ? rule.reply : '🤔 I can help you save money! Try asking about food, transport, shopping, bills, entertainment, total expense, highest expense, or ask for a personalized tip based on your expenses.';
   };
 
   const handleSend = e => {
@@ -63,7 +105,7 @@ export default function Chatbot() {
           {/* Header */}
           <div className="flex items-center gap-3 p-4 border-b border-white/10">
             <div className="w-10 h-10 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
-              <FiBot className="text-white text-lg" />
+              <FiMessageCircle className="text-white text-lg" />
             </div>
             <div className="flex-1">
               <h3 className="font-display font-semibold text-white">Financial Assistant</h3>
@@ -82,7 +124,7 @@ export default function Chatbot() {
               >
                 {msg.from === 'bot' && (
                   <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center flex-shrink-0">
-                    <FiBot className="text-white text-sm" />
+                    <FiMessageCircle className="text-white text-sm" />
                   </div>
                 )}
                 
@@ -105,7 +147,7 @@ export default function Chatbot() {
             {isTyping && (
               <div className="flex gap-3 justify-start animate-fade-in">
                 <div className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
-                  <FiBot className="text-white text-sm" />
+                  <FiMessageCircle className="text-white text-sm" />
                 </div>
                 <div className="bg-dark-800/60 backdrop-blur-sm text-gray-100 border border-white/10 px-4 py-3 rounded-2xl">
                   <div className="flex gap-1">

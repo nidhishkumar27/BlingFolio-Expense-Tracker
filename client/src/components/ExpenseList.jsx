@@ -65,7 +65,7 @@ export default function ExpenseList({ expenses, onEdit, onDelete }) {
           <div className="flex items-center gap-4">
             <div className="text-right">
               <div className="text-2xl font-bold text-primary-400">
-                ${exp.amount.toFixed(2)}
+                ₹{exp.amount.toFixed(2)}
               </div>
             </div>
             

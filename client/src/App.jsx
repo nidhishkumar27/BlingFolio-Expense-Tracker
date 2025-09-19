@@ -2,6 +2,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import DashboardPage from './pages/DashboardPage.jsx';
+import AllComponentsPage from './pages/AllComponentsPage.jsx';
 import Navbar from './components/Navbar.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 import ErrorBoundary from './components/ErrorBoundary.jsx';
@@ -24,10 +25,6 @@ const LoadingSpinner = () => (
 export default function App() {
   const { loading } = useAuth();
 
-  if (loading) {
-    return <LoadingSpinner />;
-  }
-
   return (
     <ErrorBoundary>
       <div className="min-h-screen flex flex-col">
@@ -36,7 +33,8 @@ export default function App() {
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/" element={<Protected><DashboardPage /></Protected>} />
+            <Route path="/" element={loading ? <LoadingSpinner /> : <Protected><DashboardPage /></Protected>} />
+            <Route path="/showcase" element={<AllComponentsPage />} />
             <Route path="*" element={
               <div className="text-center mt-16">
                 <h2 className="text-2xl font-semibold mb-2">Page not found</h2>

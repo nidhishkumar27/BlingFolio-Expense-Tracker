@@ -55,7 +55,7 @@ export default function DashboardSummary({ expenses }) {
             const value = context.parsed;
             const total = context.dataset.data.reduce((a, b) => a + b, 0);
             const percentage = ((value / total) * 100).toFixed(1);
-            return `${context.label}: $${value.toFixed(2)} (${percentage}%)`;
+            return `${context.label}: ₹${value.toFixed(2)} (${percentage}%)`;
           }
         }
       }
@@ -85,7 +85,7 @@ export default function DashboardSummary({ expenses }) {
             <FiDollarSign className="text-primary-400" />
             <span className="text-sm text-dark-300">Total Spent</span>
           </div>
-          <span className="font-semibold text-lg text-primary-400">${total.toFixed(2)}</span>
+          <span className="font-semibold text-lg text-primary-400">₹{total.toFixed(2)}</span>
         </div>
         
         <div className="flex items-center justify-between glass-panel p-3 rounded-lg">
@@ -93,7 +93,7 @@ export default function DashboardSummary({ expenses }) {
             <FiTrendingUp className="text-secondary-400" />
             <span className="text-sm text-dark-300">Average</span>
           </div>
-          <span className="font-semibold text-lg text-secondary-400">${avgExpense.toFixed(2)}</span>
+          <span className="font-semibold text-lg text-secondary-400">₹{avgExpense.toFixed(2)}</span>
         </div>
 
         {highestCategory && (

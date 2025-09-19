@@ -95,7 +95,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="text-dark-400 text-sm font-medium">Total Expenses</p>
-                <p className="text-2xl font-bold text-white">${totalExpenses.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-white">₹{totalExpenses.toFixed(2)}</p>
               </div>
             </div>
             
@@ -105,7 +105,7 @@ export default function DashboardPage() {
               </div>
               <div>
                 <p className="text-dark-400 text-sm font-medium">This Month</p>
-                <p className="text-2xl font-bold text-white">${thisMonthExpenses.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-white">₹{thisMonthExpenses.toFixed(2)}</p>
               </div>
             </div>
             
@@ -155,7 +155,7 @@ export default function DashboardPage() {
           </div>
         </div>
 
-        <Chatbot />
+  <Chatbot expenses={expenses} />
         {showForm && (
           <ExpenseForm 
             initial={editing} 
